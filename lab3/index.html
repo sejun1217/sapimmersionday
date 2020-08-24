@@ -12,20 +12,20 @@
     <title>실습2. AWS Backint Agent for SAP HANA :: SAP Immersion Day</title>
 
     
-    <link href="/css/nucleus.css?1598239280" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1598239280" rel="stylesheet">
-    <link href="/css/hybrid.css?1598239280" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1598239280" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1598239280" rel="stylesheet">
-    <link href="/css/auto-complete.css?1598239280" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1598239280" rel="stylesheet">
-    <link href="/css/theme.css?1598239280" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1598239280" rel="stylesheet">
+    <link href="/css/nucleus.css?1598300430" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1598300430" rel="stylesheet">
+    <link href="/css/hybrid.css?1598300430" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1598300430" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1598300430" rel="stylesheet">
+    <link href="/css/auto-complete.css?1598300430" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1598300430" rel="stylesheet">
+    <link href="/css/theme.css?1598300430" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1598300430" rel="stylesheet">
     
-      <link href="/css/theme-aws.css?1598239280" rel="stylesheet">
+      <link href="/css/theme-aws.css?1598300430" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1598239280"></script>
+    <script src="/js/jquery-3.3.1.min.js?1598300430"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -54,14 +54,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1598239280"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1598239280"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1598300430"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1598300430"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/master.d3ej9oamifrc4n.amplifyapp.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1598239280"></script>
+<script type="text/javascript" src="/js/search.js?1598300430"></script>
 
     
   </div>
@@ -269,7 +269,15 @@
                 
                     <div class="progress">
     <div class="wrapper">
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -294,7 +302,149 @@
 
 
 
-	
+	<h4 id="lab-설명">Lab 설명</h4>
+<p>AWS Backint Agent for SAP HANA는 Amazon EC2 인스턴스에서 실행되는 SAP HANA 워크로드를 위한 SAP 인증 백업 및 복원 솔루션입니다. 실습1 에서 생성된 HANA DB를 Backint로 백업하는 방법을 알아볼 예정입니다.</p>
+<hr>
+<h4 id="lab-architecture">Lab Architecture</h4>
+<p><img src="images/01.png" alt="image01"></p>
+<hr>
+<h4 id="prerequisites">Prerequisites</h4>
+<p>Backint Agent for SAP HANA 를 사용하기 위한 준비 단계는 아래와 같습니다.</p>
+<ul>
+<li><strong>1단계. HANA DB 백업을 저장할 S3 버킷 생성</strong>
+<ul>
+<li>실습0 에서 S3 버킷을 CloudFormation으로 생성하였습니다. 이 단계는 생략 합니다.</li>
+</ul>
+</li>
+<li><strong>2단계. EC2 서비스 Role에 S3 권한 부여</strong></li>
+<li><strong>3단계. SSM(Systems Manager) Agent 업그레이드</strong></li>
+</ul>
+<ol>
+<li>AWS Management Console에 로그인 합니다. (실습1과 동일한 리전 사용)</li>
+<li><strong>2단계. EC2 서비스 Role에 S3 권한 부여</strong> 입니다.</li>
+<li><a href="https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:sort=instanceId">EC2 콘솔</a>에 접속합니다.</li>
+<li>생성된 HANA DB 인스턴스(e.g Name: SAP HANA Master) 선택하고 아래에 <strong>IAM 역할</strong>에 우측 링크를 클릭 합니다.
+<img src="images/02.png" alt="image02"></li>
+<li><strong>인라인 정책 추가</strong> 를 선택합니다.
+<img src="images/03.png" alt="image03"></li>
+<li><strong>JSON</strong> 탭을 선택합니다. 그리고 아래 스크립트를 복사하여 붙여 넣습니다. 그리고 <strong>정책 검토</strong> 버튼을 누릅니다.</li>
+</ol>
+<pre><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Sid&quot;: &quot;VisualEditor1&quot;,
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Action&quot;: [
+                &quot;s3:GetBucketPolicyStatus&quot;,
+                &quot;s3:GetBucketLocation&quot;,
+                &quot;s3:ListBucket&quot;,
+                &quot;s3:GetBucketAcl&quot;,
+                &quot;s3:GetBucketPolicy&quot;
+            ],
+            &quot;Resource&quot;: [
+                &quot;arn:aws:s3:::sapimmersiondayenv*/*&quot;,
+                &quot;arn:aws:s3:::sapimmersiondayenv*&quot;
+            ]
+        },
+        {
+              &quot;Sid&quot;: &quot;VisualEditor0&quot;,
+              &quot;Effect&quot;: &quot;Allow&quot;,
+              &quot;Action&quot;: [
+                  &quot;s3:PutObjectTagging&quot;,
+                  &quot;s3:PutObject&quot;,
+                  &quot;s3:GetObject&quot;,
+                  &quot;s3:DeleteObject&quot;
+              ],
+              &quot;Resource&quot;: &quot;arn:aws:s3:::sapimmersiondayenv*/&quot;
+        }
+    ]
+}
+</code></pre><p><img src="images/04.png" alt="image04"></p>
+<ol start="7">
+<li>
+<p>이름에 <strong>SAPBackintInlinePolicy</strong> 라고 입력하고 <strong>정책 생성</strong> 버튼을 클릭합니다.
+<img src="images/05.png" alt="image05"></p>
+</li>
+<li>
+<p><strong>2단계. EC2 서비스 Role에 S3 권한 부여</strong> 를 위한 정책 생성이 완료되었습니다.
+<img src="images/06.png" alt="image06"></p>
+</li>
+<li>
+<p>다음은 <strong>3단계. SSM(System Manager) Agent 업그레이드</strong> 입니다.</p>
+</li>
+<li>
+<p><a href="https://console.aws.amazon.com/systems-manager/session-manager?region=us-east-1">Systems Manager - Session Manager</a> 에 접속합니다.</p>
+</li>
+<li>
+<p><strong>세션 시작</strong> 버튼을 클릭 합니다.
+<img src="images/07.png" alt="image07"></p>
+</li>
+<li>
+<p>HANA DB 인스턴스(e.g SAP HANA Master)를 선택하고 <strong>SSM 에이전트 업데이트 버튼</strong>을 누릅니다.
+<img src="images/08.png" alt="image08">
+<img src="images/09.png" alt="image09"></p>
+</li>
+<li>
+<p>업그레이드 전체상태가 <strong>성공</strong> 인지 확인 합니다.(1~2분 소요) <strong>3단계. SSM(System Manager) Agent 업그레이드</strong> 가 완료 되었습니다.
+<img src="images/10.png" alt="image10"></p>
+</li>
+</ol>
+<hr>
+<h4 id="install-and-configure-aws-backint-agent-for-sap-hana">Install and configure AWS Backint Agent for SAP HANA</h4>
+<p>Systems Manager document를 이용하여 AWS Backint Agent를 설치하는 방법을 알아 봅니다</p>
+<ol>
+<li>
+<p><a href="https://console.aws.amazon.com/systems-manager/documents?region=us-east-1">Systems Manager document</a>에 접속합니다.</p>
+</li>
+<li>
+<p><strong>AWSSAP-InstallBackint</strong> 를 검색합니다.
+<img src="images/11.png" alt="image11"></p>
+</li>
+<li>
+<p><strong>AWSSAP-InstallBackint</strong> 를 선택합니다.
+<img src="images/12.png" alt="image12"></p>
+</li>
+<li>
+<p><strong>Run command</strong> 버튼을 누릅니다.
+<img src="images/13.png" alt="image13"></p>
+</li>
+<li>
+<p><strong>명령</strong> 파라미터 옵션을 아래와 같이 입력 합니다.</p>
+<ul>
+<li>Bucket Name : (확인하는 방법은 아래 참고, e.g sapimmersiondayenv-s3hanabackupbucket-19hx563an67nm)
+<ul>
+<li>실습 0에서 CloudFormation을 통해 만든 버킷 네임을 확인 합니다.</li>
+<li><a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/">CloudFormation 콘솔</a> 을 새로운 탭/창에서 접속합니다.</li>
+<li><strong>SAPImmersionDayEnv</strong> 스택을 선택합니다.</li>
+<li><strong>출력</strong> 탭을 선택하고 <strong>S3HANABackupBucket</strong> 키의 값을 확인 합니다.</li>
+</ul>
+</li>
+<li>System ID : <strong>HDB</strong></li>
+<li>Bucket Region : <strong>us-east-1</strong></li>
+<li>Bucket Owner Account ID : (확인하는 방법은 아래 참고, e.g 245035330768(12자리))
+<ul>
+<li>콘솔 제일 우측 상단에 <strong>TeamRole/MasterKey@~</strong> 부분을 선택하고 계정을 확인 한다. - 제외하고 입력</li>
+</ul>
+</li>
+<li>Modify Global Ini File : <strong>modify</strong> (Backint 백업을 위해서는 global.ini 파일 업데이트가 필요합니다)
+<img src="images/14.png" alt="image14"></li>
+</ul>
+</li>
+<li>
+<p><strong>대상</strong> 옵션을 아래와 같이 설정 합니다.</p>
+<ul>
+<li>수동으로 인스턴스 선택</li>
+<li>HANA DB 인스턴스(e.g SAP HANA Master) 선택
+<img src="images/15.png" alt="image15"></li>
+</ul>
+</li>
+<li>
+<p>나머지 옵션은 디폴트 설정으로 두고 <strong>실행</strong> 버튼을 선택 합니다.
+<img src="images/16.png" alt="image16"></p>
+</li>
+</ol>
+
 
 
 
@@ -435,19 +585,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1598239280"></script>
-    <script src="/js/perfect-scrollbar.min.js?1598239280"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1598239280"></script>
-    <script src="/js/jquery.sticky.js?1598239280"></script>
-    <script src="/js/featherlight.min.js?1598239280"></script>
-    <script src="/js/highlight.pack.js?1598239280"></script>
+    <script src="/js/clipboard.min.js?1598300430"></script>
+    <script src="/js/perfect-scrollbar.min.js?1598300430"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1598300430"></script>
+    <script src="/js/jquery.sticky.js?1598300430"></script>
+    <script src="/js/featherlight.min.js?1598300430"></script>
+    <script src="/js/highlight.pack.js?1598300430"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1598239280"></script>
-    <script src="/js/learn.js?1598239280"></script>
-    <script src="/js/hugo-learn.js?1598239280"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1598300430"></script>
+    <script src="/js/learn.js?1598300430"></script>
+    <script src="/js/hugo-learn.js?1598300430"></script>
 
-    <link href="/mermaid/mermaid.css?1598239280" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1598239280"></script>
+    <link href="/mermaid/mermaid.css?1598300430" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1598300430"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

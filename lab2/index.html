@@ -12,20 +12,20 @@
     <title>실습1. SAP HANA Quick Start :: SAP Immersion Day</title>
 
     
-    <link href="/css/nucleus.css?1598239280" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1598239280" rel="stylesheet">
-    <link href="/css/hybrid.css?1598239280" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1598239280" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1598239280" rel="stylesheet">
-    <link href="/css/auto-complete.css?1598239280" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1598239280" rel="stylesheet">
-    <link href="/css/theme.css?1598239280" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1598239280" rel="stylesheet">
+    <link href="/css/nucleus.css?1598300430" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1598300430" rel="stylesheet">
+    <link href="/css/hybrid.css?1598300430" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1598300430" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1598300430" rel="stylesheet">
+    <link href="/css/auto-complete.css?1598300430" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1598300430" rel="stylesheet">
+    <link href="/css/theme.css?1598300430" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1598300430" rel="stylesheet">
     
-      <link href="/css/theme-aws.css?1598239280" rel="stylesheet">
+      <link href="/css/theme-aws.css?1598300430" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1598239280"></script>
+    <script src="/js/jquery-3.3.1.min.js?1598300430"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -54,14 +54,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1598239280"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1598239280"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1598300430"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1598300430"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/master.d3ej9oamifrc4n.amplifyapp.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1598239280"></script>
+<script type="text/javascript" src="/js/search.js?1598300430"></script>
 
     
   </div>
@@ -269,7 +269,15 @@
                 
                     <div class="progress">
     <div class="wrapper">
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
     </div>
 </div>
 
@@ -294,7 +302,117 @@
 
 
 
-	
+	<h4 id="lab-설명">Lab 설명</h4>
+<p>이번 Lab은 SAP HANA Quick Start 을 이용하여 SAP HANA DB 를 AWS 인프라 위해 설치 합니다. 이번 실습은 단일 AZ Single Node 로 구성 합니다.
+필요에 따라 단일 AZ(Single/Multi Node), Multi AZ High Availability로 구성이 가능합니다.</p>
+<p><em><strong>실습1. Launch Wizard for SAP 를 수행한 경우 아래 과정을 생략 합니다</strong></em></p>
+<hr>
+<h4 id="lab-architecture">Lab Architecture</h4>
+<p><img src="images/01.png" alt="image01"></p>
+<hr>
+<h4 id="deployment-steps">Deployment Steps</h4>
+<p>자세한 내용은 <a href="https://docs.aws.amazon.com/ko_kr/quickstart/latest/sap-hana/welcome.html">배포 안내서</a> 를 참고 하시기 바랍니다.<!-- raw HTML omitted -->
+배포방법은 6단계로 가이드 하고 있습니다. 본 실습은, <strong>단계 4</strong> 내용을 다룹니다.</p>
+<ol>
+<li>단계 1 : AWS 계정 준비</li>
+<li>단계 2 : 운영 체제 이미지 구독</li>
+<li>단계 3 : SAP HANA 소프트웨어 다운로드</li>
+<li><em><strong>단계 4 : 퀵 스타트 시작</strong></em></li>
+<li>단계 5 : SAP HANA 노드에 액세스</li>
+<li>단계 6 : 배포 후 작업 수행</li>
+</ol>
+<hr>
+<h4 id="sap-hana-quick-starts">SAP HANA Quick Starts</h4>
+<p>SAP HANA Quick Start 을 통해 간단한 설정 및 클릭 만으로 SAP HANA DB를 설치할 수 있습니다<!-- raw HTML omitted --></p>
+<ol>
+<li>
+<p>AWS Management Console에 로그인 합니다. (Region : us-east-1)</p>
+</li>
+<li>
+<p><a href="https://aws.amazon.com/ko/quickstart/architecture/sap-hana/?nc1=h_ls">SAP HANA Quick Starts</a> 에 접속합니다</p>
+</li>
+<li>
+<p>페이지 하단 <strong>배포 방법</strong> 을 선택 하고 <strong>단일 AZ 배포 - 기존 VPC</strong> 를 선택합니다.
+<img src="images/02.png" alt="image02"></p>
+</li>
+<li>
+<p>CloudFormation 화면으로 리다이렉트 됩니다.</p>
+</li>
+<li>
+<p><strong>1단계 - 템플릿 지정</strong> 입니다.아래 S3 주소를 확인하시고 맞다면 <strong>다음</strong> 버튼을 누릅니다.
+<img src="images/03.png" alt="image03"></p>
+</li>
+<li>
+<p><strong>2단계 - 스택 세부 정보 지정 지정</strong> 입니다. 스택이름은 디폴트 설정을 사용합니다.</p>
+</li>
+<li>
+<p><strong>Existing network infrastructure details</strong> 입니다. 나머지는 실습0에서 CloudFormation을 통해 만든 인프라를 사용합니다.</p>
+<ul>
+<li>Choose VPC ID : <strong>SAP ERP</strong> 선택</li>
+<li>Choose private subnet : <strong>SAP ERP Private Subnet (AZ1)</strong> 선택</li>
+<li>Choose public subnet : <strong>SAP ERP Public Subnet (AZ1)</strong> 선택</li>
+<li>Enter CIDR block for private subnet : <strong>10.192.20.0/24</strong> 변경</li>
+<li>Enter CIDR block for public subnet : <strong>10.192.10.0/24</strong> 변경
+<img src="images/04.png" alt="image04"></li>
+</ul>
+</li>
+<li>
+<p><strong>Server and storage configuration</strong> 입니다. 나머지는 디폴트 설정을 사용하고 아래 옵션만 변경 합니다.</p>
+<ul>
+<li>Choose operating system and version for SAP HANA : <strong>SuSELinux15</strong>
+<ul>
+<li><strong>다중 AZ(HA) 배포 시나리오에서는 SLES for SAP 또는 RHEL for SAP with HA and US가 필요합니다.</strong></li>
+</ul>
+</li>
+<li>Choose instance type for SAP HANA : <strong>r5.2xlarge</strong> (최소 인스턴스 선택)</li>
+<li>Choose key pair : <strong>SAPImmersionDay</strong> (이번 실습에는 Systems Manager를 통해 DB OS에 접속할 예정입니다)
+<img src="images/05.png" alt="image05"></li>
+</ul>
+</li>
+<li>
+<p><strong>SAP HANA database configuration</strong> 입니다. 나머지는 디폴트 설정을 사용하고 아래 옵션만 변경 합니다.</p>
+<ul>
+<li>Enter SAP HANA password(HANA Master Password 설정) : <strong>Init12345!</strong></li>
+<li>Enter Amazon S3 URL for SAP HANA software(단계 3참고) : <strong>(s3://sap-immsersionday-hol1/hanadb/)</strong>
+<ul>
+<li>참고 : 실습을 위해 제공되는 S3 URL 입니다. 실습 이후에는 사용하실 수 없습니다.
+<img src="images/06.png" alt="image06"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Optional configuration</strong> 입니다. 기본 설정을 유지합니다.</p>
+</li>
+<li>
+<p><strong>Advanced configuration (Do not modify unless directed by AWS Support)</strong> 입니다. 기본 설정을 유지합니다.</p>
+</li>
+<li>
+<p><strong>AWS Quick Start configuration</strong> 입니다. 기본 설정을 유지합니다.</p>
+</li>
+<li>
+<p><strong>다음</strong> 버튼을 클릭합니다.
+<img src="images/07.png" alt="image07"></p>
+</li>
+<li>
+<p><strong>3단계 - 스택 옵션 구성</strong> 입니다. 기본 설정을 유지하고. <strong>다음</strong> 버튼을 누릅니다.
+<img src="images/08.png" alt="image08"></p>
+</li>
+<li>
+<p><strong>4단계 - 검토</strong> 입니다. 화면 아래 체크 박스를 선택하고 <strong>스택생성</strong> 버튼을 누릅니다.
+<img src="images/09.png" alt="image09"></p>
+</li>
+<li>
+<p><strong>SAP-HANA-on-AWS</strong> 스택이 생성되었습니다. 최종 완료까지 30 ~ 40분정도 소요됩니다.
+<img src="images/10.png" alt="image10"></p>
+</li>
+<li>
+<p><strong>CREATE_COMPLETE</strong> 상태가 되어야 실습이 완료된것 입니다.
+<img src="images/11.png" alt="image11"></p>
+</li>
+</ol>
+<p><em><strong>참고 : Failed 가 발생했을 경우 진행하고 있는 Solutions Architect에게 문의하시기 바랍니다.</strong></em></p>
+
 
 
 
@@ -438,19 +556,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1598239280"></script>
-    <script src="/js/perfect-scrollbar.min.js?1598239280"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1598239280"></script>
-    <script src="/js/jquery.sticky.js?1598239280"></script>
-    <script src="/js/featherlight.min.js?1598239280"></script>
-    <script src="/js/highlight.pack.js?1598239280"></script>
+    <script src="/js/clipboard.min.js?1598300430"></script>
+    <script src="/js/perfect-scrollbar.min.js?1598300430"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1598300430"></script>
+    <script src="/js/jquery.sticky.js?1598300430"></script>
+    <script src="/js/featherlight.min.js?1598300430"></script>
+    <script src="/js/highlight.pack.js?1598300430"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1598239280"></script>
-    <script src="/js/learn.js?1598239280"></script>
-    <script src="/js/hugo-learn.js?1598239280"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1598300430"></script>
+    <script src="/js/learn.js?1598300430"></script>
+    <script src="/js/hugo-learn.js?1598300430"></script>
 
-    <link href="/mermaid/mermaid.css?1598239280" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1598239280"></script>
+    <link href="/mermaid/mermaid.css?1598300430" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1598300430"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

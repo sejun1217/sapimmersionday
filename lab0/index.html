@@ -12,20 +12,20 @@
     <title>실습0. 사전 준비 :: SAP Immersion Day</title>
 
     
-    <link href="/css/nucleus.css?1598239280" rel="stylesheet">
-    <link href="/css/fontawesome-all.min.css?1598239280" rel="stylesheet">
-    <link href="/css/hybrid.css?1598239280" rel="stylesheet">
-    <link href="/css/featherlight.min.css?1598239280" rel="stylesheet">
-    <link href="/css/perfect-scrollbar.min.css?1598239280" rel="stylesheet">
-    <link href="/css/auto-complete.css?1598239280" rel="stylesheet">
-    <link href="/css/atom-one-dark-reasonable.css?1598239280" rel="stylesheet">
-    <link href="/css/theme.css?1598239280" rel="stylesheet">
-    <link href="/css/hugo-theme.css?1598239280" rel="stylesheet">
+    <link href="/css/nucleus.css?1598300430" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1598300430" rel="stylesheet">
+    <link href="/css/hybrid.css?1598300430" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1598300430" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1598300430" rel="stylesheet">
+    <link href="/css/auto-complete.css?1598300430" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1598300430" rel="stylesheet">
+    <link href="/css/theme.css?1598300430" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1598300430" rel="stylesheet">
     
-      <link href="/css/theme-aws.css?1598239280" rel="stylesheet">
+      <link href="/css/theme-aws.css?1598300430" rel="stylesheet">
     
 
-    <script src="/js/jquery-3.3.1.min.js?1598239280"></script>
+    <script src="/js/jquery-3.3.1.min.js?1598300430"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -54,14 +54,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/js/lunr.min.js?1598239280"></script>
-<script type="text/javascript" src="/js/auto-complete.js?1598239280"></script>
+<script type="text/javascript" src="/js/lunr.min.js?1598300430"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1598300430"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/master.d3ej9oamifrc4n.amplifyapp.com\/";
     
 </script>
-<script type="text/javascript" src="/js/search.js?1598239280"></script>
+<script type="text/javascript" src="/js/search.js?1598300430"></script>
 
     
   </div>
@@ -302,23 +302,27 @@
 
 
 
-	<p>실습1. Launch Wizard for SAP 실행하기 위해 필요한 VPC, Public/Private Subnet, S3, Key Pairs를 생성 및 구성합니다.</p>
-<p><!-- raw HTML omitted -->** 참고 : 실습1. Launch Wizard for SAP 대신 실습1. SAP HANA Quick Start를 수행할 경우 아래 과정을 생략 합니다.**<!-- raw HTML omitted --></p>
-<h4 id="cloudformation으로-launch-wizard-for-sap-환경-구성">CloudFormation으로 Launch Wizard for SAP 환경 구성</h4>
+	<h4 id="lab-설명">Lab 설명</h4>
+<p>실습1. SAP on AWS 설치 하기 위해 필요한 VPC, Public/Private Subnet, S3, Key Pairs를 생성 및 구성합니다.</p>
+<hr>
+<h4 id="lab-architecture">Lab Architecture</h4>
+<p><img src="images/00.png" alt="image01"></p>
+<hr>
+<h4 id="cloudformation으로-sap-on-aws-설치-인프라-구성">CloudFormation으로 SAP on AWS 설치 인프라 구성</h4>
 <p>Lab 전체에서 사용할 Infra를 CloudFormation 으로 생성합니다.<!-- raw HTML omitted --></p>
 <ol>
-<li>AWS Management Console에 로그인 합니다.</li>
-<li><a href="https://ap-northeast-2.console.aws.amazon.com/cloudformation/home?region=ap-northeast-2#/stacks/quickcreate?templateURL=https://cloudformation-template-sejun.s3.ap-northeast-2.amazonaws.com/SAPLaunchWizardEnv.yaml&amp;stackName=SAPImmersionDayEnv">AWS Cloudformation for Launch Wizard Env</a> 접속합니다.</li>
-<li>기본 설정을 확인 합니다. VPC 및 Subnet CIDR이 기존에 생성되어 있는 것과 겹치지 않으면, 변경 없이  <strong>Create stack</strong> 버튼을 누릅니다.
+<li>AWS Management Console에 로그인 합니다. (Region : us-east-1)</li>
+<li><a href="https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://cloudformation-template-sejun.s3.ap-northeast-2.amazonaws.com/SAPLaunchWizardEnv.yaml&amp;stackName=SAPImmersionDayEnv">AWS Cloudformation for SAP on AWS</a> 접속합니다.</li>
+<li>기본 설정을 확인 합니다. VPC 및 Subnet CIDR이 기존에 생성되어 있는 것과 겹치지 않으면, 변경 없이  <strong>스택 생성</strong> 버튼을 누릅니다.
 <img src="images/01.png" alt="image01"></li>
 <li><strong>Create Stack</strong> 버튼을 누르면 아래와 같은 화면으로 리다이렉트 됩니다. Stack이 <strong>CREATE_COMPLETE</strong> 될때 까지 기다립니다.
 <img src="images/02.png" alt="image02">
 <img src="images/03.png" alt="image03"></li>
-<li>다음은 HANA EC2 인스턴스의 Key Pair 를 생성 합니다. <a href="https://ap-northeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-2#KeyPairs:">Create Key Pairs</a> 접속합니다.</li>
-<li><strong>Create Key Pair</strong> 버튼을 클릭하고, Name에 <strong>SAPImmersionDay</strong> 입력 후 다시 <strong>Create Key Pair</strong> 버튼을 클릭합니다. 이번 실습은 System Manager-Session Manager를 통해 HANA EC2 인스턴스에 접속할 예정입니다. 저장된 Key Pair는 사용하지 않을 예정입니다.(Launch Wizard 옵션 입력을 위해 생성)
+<li>다음은 HANA EC2 인스턴스의 Key Pair 를 생성 합니다. <a href="https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#KeyPairs:">Create Key Pairs</a> 접속합니다.</li>
+<li><strong>키 페어 생성</strong> 버튼을 클릭하고, Name에 <strong>SAPImmersionDay</strong> 입력 후 다시 <strong>키 페어 생성</strong> 버튼을 클릭합니다. 이번 실습은 Systems Manager-Session Manager를 통해 HANA EC2 인스턴스에 접속할 예정입니다. 저장된 Key Pair는 사용하지 않을 예정입니다.
 <img src="images/04.png" alt="image04">
 <img src="images/05.png" alt="image05"></li>
-<li>Lab에서 사용할 Infra를 CloudFormation으로 생성하였습니다. 다음은 실습1. Launch Wizard for SAP 로 이동합니다.</li>
+<li>실습1에서 사용할 Infra를 CloudFormation으로 생성하였습니다. 다음은 실습1 로 이동합니다.</li>
 </ol>
 <hr>
 <!-- raw HTML omitted -->
@@ -466,19 +470,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/js/clipboard.min.js?1598239280"></script>
-    <script src="/js/perfect-scrollbar.min.js?1598239280"></script>
-    <script src="/js/perfect-scrollbar.jquery.min.js?1598239280"></script>
-    <script src="/js/jquery.sticky.js?1598239280"></script>
-    <script src="/js/featherlight.min.js?1598239280"></script>
-    <script src="/js/highlight.pack.js?1598239280"></script>
+    <script src="/js/clipboard.min.js?1598300430"></script>
+    <script src="/js/perfect-scrollbar.min.js?1598300430"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1598300430"></script>
+    <script src="/js/jquery.sticky.js?1598300430"></script>
+    <script src="/js/featherlight.min.js?1598300430"></script>
+    <script src="/js/highlight.pack.js?1598300430"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/js/modernizr.custom-3.6.0.js?1598239280"></script>
-    <script src="/js/learn.js?1598239280"></script>
-    <script src="/js/hugo-learn.js?1598239280"></script>
+    <script src="/js/modernizr.custom-3.6.0.js?1598300430"></script>
+    <script src="/js/learn.js?1598300430"></script>
+    <script src="/js/hugo-learn.js?1598300430"></script>
 
-    <link href="/mermaid/mermaid.css?1598239280" rel="stylesheet" />
-    <script src="/mermaid/mermaid.js?1598239280"></script>
+    <link href="/mermaid/mermaid.css?1598300430" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1598300430"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
